@@ -1,0 +1,35 @@
+$script = <<-SCRIPT
+	sudo apt-get update
+	sudo apt-get install nginx -y
+SCRIPT
+
+Vagrant.configure("2") do |config|
+	# config.vm.hostname = "main"
+    config.vm.box = "bento/ubuntu-18.04"
+	# config.vm.network "public_network"
+	config.vm.synced_folder ".", "./vagrant", disabled: true
+
+	config.vm.define "main" do |config|
+		config.vm.hostname = "main"
+		config.vm.network "private_network", ip: "10.0.0.100"
+		config.vm.provision "shell", inline: $script
+	end
+
+	config.vm.define "server1" do |config|
+		config.vm.hostname = "server1"
+		config.vm.network "private_network", ip: "10.0.0.101"
+		config.vm.provision "shell", inline: $script
+	end
+
+	config.vm.define "server2" do |config|
+		config.vm.hostname = "server2"
+		config.vm.network "private_network", ip: "10.0.0.102"
+		config.vm.provision "shell", inline: $script
+	end
+
+	config.vm.define "server3" do |config|
+		config.vm.hostname = "server3"
+		config.vm.network "private_network", ip: "10.0.0.103"
+		config.vm.provision "shell", inline: $script
+	end
+end
